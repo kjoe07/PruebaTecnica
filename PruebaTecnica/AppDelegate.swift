@@ -10,10 +10,25 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var challengeTask: NetworkCancelable?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let dataLoader = NetworkLoader(session: URLSession.shared)
+        let challengeService = RemoteDataService(loader: dataLoader)
+        let qItems = [URLQueryItem(name: "operation", value: "getchallenge"),URLQueryItem(name: "username", value: "prueba")]
+        let challengeEndpoint = HomeEndpoint(method: .get , path: "datacrm/pruebatecnica/webservice.php", queryItems: qItems, headers: nil, params: nil)
+        challengeTask = challengeService.getData(endPoint: challengeEndpoint, completion: { (result: Result<GetChallengeResult,Error>) in
+            switch result {
+            case .success(let data):
+                if !KeychainService.savePassword(service: "PTecnica", account: "token", data: data.result?.token ?? "") {
+                    KeychainService.updatePassword(service: "OnRoad", account: "token", data: data.result?.token ?? "")
+                }
+                NotificationCenter.default.post(name: NSNotification.Name.init(rawValue: "challengeResponse"), object: data)
+            case .failure(let error):
+                NotificationCenter.default.post(name: NSNotification.Name.init(rawValue: "challengeFailed"), object: error)
+            }
+        })
         return true
     }
 
