@@ -24,6 +24,7 @@ class ViewController: UIViewController {
 
     @IBAction func login(_ sender: Any) {
         if KeychainService.loadPassword(service: "PT", account: "token") != nil {
+            login()
         }
     }
     
@@ -40,7 +41,14 @@ class ViewController: UIViewController {
         let md5 = MD5().MD5(string: "\(token)d0n9nzY6w66xuJtd")
         let params = ["operation": "login","username":userTextField.text ?? "prueba","accessKey": md5]
         let loginEndpoint = HomeEndpoint(method: .post, path: "datacrm/pruebatecnica/webservice.php", queryItems: nil, headers: ["Content-Type": "application/x-www-form-urlencoded"], params: params)
-      //  loginService?.getData(endPoint: loginEndpoint, completion: <#T##(Result<Decodable & Encodable, Error>) -> Void#>)
+        _ = loginService?.getData(endPoint: loginEndpoint, completion: { [weak self] (result: Result<LoginResponse,Error>) in
+            switch result {
+            case .success(let data):
+                debugPrint(data.result?.sessionName ?? "")
+            case .failure(let error):
+                debugPrint("error",error.localizedDescription)
+            }
+        })
     }
     
 }
