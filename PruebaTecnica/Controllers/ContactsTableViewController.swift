@@ -8,33 +8,43 @@
 import UIKit
 
 class ContactsTableViewController: UITableViewController {
+    var service: RemoteDataService?
 
+    var result: [ContacsResult]?
     override func viewDidLoad() {
         super.viewDidLoad()
-        showActivityIndicator()
+        //showActivityIndicator()
+        let dataLoader: DataLoader = NetworkLoader(session: URLSession.shared)
+        service = RemoteDataService(loader: dataLoader)
+        loadContacts()
+        tableView.tableFooterView = UIView()
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        if result?.isEmpty ?? false{
+            //TODO: - Manage empty state
+        }else {
+            //TODO: - restore from empty state when data is avaible
+        }
+        return result?.count ?? 0
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ContactsTableViewCell
+        cell.contactId.text = result?[indexPath.row].id ?? ""
+        cell.contactNo.text = result?[indexPath.row].contact_no ?? ""
+        cell.lastname.text = result?[indexPath.row].lastname ?? ""
+        cell.createdTime.text = DateHelper.getDate(date: result?[indexPath.row].createdtime ?? "")
         return cell
     }
-    */
+
 
     /*
     // Override to support conditional editing of the table view.
@@ -80,5 +90,24 @@ class ContactsTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    func loadContacts() {
+        showActivityIndicator()
+        let sessionName = KeychainService.loadPassword(service: "PTecnica", account: "session")
+        let qItems = [URLQueryItem(name: "operation", value: "query"),URLQueryItem(name: "sessionName", value: sessionName),URLQueryItem(name: "query", value: "select * from Contacts;")]
+        let contactsEndpoint = HomeEndpoint(method: .get, path: "/datacrm/pruebatecnica/webservice.php", queryItems: qItems, headers: nil, params: nil)
+        _ = service?.getData(endPoint: contactsEndpoint, completion: { [weak self] (result: Result<ContacsResponse,Error>) in
+            DispatchQueue.main.async {
+                guard let self = self else {return}
+                self.hideActivityIndicator()
+                switch result {
+                case .success(let data):
+                    self.result = data.result
+                    self.tableView.reloadData()
+                case .failure(let error):
+                    debugPrint("error:",error.localizedDescription)
+                }
+            }
+        })
+    }
 
 }

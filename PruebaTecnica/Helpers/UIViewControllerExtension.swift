@@ -15,7 +15,7 @@ extension UIViewController {
         activityIndicator.tag = 101
         container.frame = self.view.frame
         container.center = self.view.center
-        container.backgroundColor = .lightGray
+        container.backgroundColor = .systemBackground
         loadingView.frame = CGRect(x: 0.0, y: 0.0, width: 80.0, height: 80.0)
         loadingView.center = self.view.center
         loadingView.backgroundColor = .darkGray

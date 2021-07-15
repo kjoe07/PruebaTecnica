@@ -19,6 +19,11 @@ struct Resquetable{
         if endPoint.params != nil{
             let httpBody = try! JSONSerialization.data(withJSONObject: endPoint.params ?? [:], options: [])
             request.httpBody = httpBody
+            if endPoint.headers?["Content-Type"] == "application/x-www-form-urlencoded" {
+                let jsonString = endPoint.params?.reduce("") { "\($0)\($1.0)=\($1.1)&" }.dropLast()
+                let jsonData = jsonString?.data(using: .utf8, allowLossyConversion: false)!
+                request.httpBody = jsonData
+            }
         }
         return request
     }

@@ -30,7 +30,7 @@ class RemoteDataService:Services{
         })
     }
     
-    init(loader: NetworkLoader) {
+    init(loader: DataLoader) {
         self.loader = loader
     }
 }
