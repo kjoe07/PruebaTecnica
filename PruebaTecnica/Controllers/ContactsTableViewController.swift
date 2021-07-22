@@ -20,6 +20,9 @@ class ContactsTableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        self.loadContactCount()
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -109,5 +112,28 @@ class ContactsTableViewController: UITableViewController {
             }
         })
     }
-
+    func loadContactCount() {
+        showActivityIndicator()
+        let sessionName = KeychainService.loadPassword(service: "PTecnica", account: "session")
+        let qItems = [URLQueryItem(name: "operation", value: "query"),URLQueryItem(name: "sessionName", value: sessionName),URLQueryItem(name: "query", value: "select count(*) from Contacts;")]
+        let contactsEndpoint = HomeEndpoint(method: .get, path: "/datacrm/pruebatecnica/webservice.php", queryItems: qItems, headers: nil, params: nil)
+        _ = service?.getData(endPoint: contactsEndpoint, completion: { [weak self] (result: Result<ContacsCountResponse,Error>) in
+            DispatchQueue.main.async {
+                guard let self = self else {return}
+                self.hideActivityIndicator()
+                switch result {
+                case .success(let data):
+                    debugPrint(data)
+                    let alert = UIAlertController(title: "Numero de contactos", message: "el numero de contactos en el servidor es : \(data.result?.first?.count ?? "0")", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "Aceptar", style: .cancel, handler: nil)
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                    //self.result = data.result
+                    //self.tableView.reloadData()
+                case .failure(let error):
+                    debugPrint("error:",error.localizedDescription)
+                }
+            }
+        })
+    }
 }

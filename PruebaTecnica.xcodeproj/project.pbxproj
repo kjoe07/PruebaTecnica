@@ -31,6 +31,7 @@
 		119AB655269FAC9A00A976EB /* ContacsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119AB654269FAC9A00A976EB /* ContacsResponse.swift */; };
 		119AB657269FB39E00A976EB /* AutenticatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119AB656269FB39E00A976EB /* AutenticatorManager.swift */; };
 		119AB659269FBB9700A976EB /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119AB658269FBB9700A976EB /* DateHelper.swift */; };
+		11A946D026A9FB9C0027FA77 /* ContactsCountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A946CF26A9FB9C0027FA77 /* ContactsCountResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		119AB654269FAC9A00A976EB /* ContacsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContacsResponse.swift; sourceTree = "<group>"; };
 		119AB656269FB39E00A976EB /* AutenticatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutenticatorManager.swift; sourceTree = "<group>"; };
 		119AB658269FBB9700A976EB /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		11A946CF26A9FB9C0027FA77 /* ContactsCountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCountResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				119AB639269F83D300A976EB /* GetChallengeResult.swift */,
 				119AB64A269F9F9B00A976EB /* LoginResponse.swift */,
 				119AB654269FAC9A00A976EB /* ContacsResponse.swift */,
+				11A946CF26A9FB9C0027FA77 /* ContactsCountResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				119AB659269FBB9700A976EB /* DateHelper.swift in Sources */,
 				119AB61F269F7A1000A976EB /* SceneDelegate.swift in Sources */,
 				119AB641269F859D00A976EB /* Endpoint.swift in Sources */,
+				11A946D026A9FB9C0027FA77 /* ContactsCountResponse.swift in Sources */,
 				119AB63F269F851E00A976EB /* Resquetable.swift in Sources */,
 				119AB63A269F83D300A976EB /* GetChallengeResult.swift in Sources */,
 				119AB650269FA5A000A976EB /* ContactsTableViewCell.swift in Sources */,
